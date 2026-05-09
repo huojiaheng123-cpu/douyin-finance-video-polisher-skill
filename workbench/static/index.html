@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>本地财经视频生成工作台</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand"><span>9:16</span> 本地财经视频生成工作台</div>
+      <button id="refreshCapabilities">重新检测</button>
+    </header>
+    <main>
+      <section class="panel" id="capabilityPanel">
+        <h1>上传配音，生成竖屏财经短视频</h1>
+        <p id="capabilitySummary">正在检测本机视频能力...</p>
+        <div id="toolList" class="tool-list"></div>
+      </section>
+
+      <section class="workspace">
+        <form id="jobForm" class="panel form-panel">
+          <label>音频文件 <input name="audio" type="file" accept=".wav,.mp3,.m4a,audio/*" required /></label>
+          <label>视频主题 <input name="theme" placeholder="例如：AI炒股" /></label>
+          <label>流量词 <input name="traffic_word" placeholder="例如：AI量化" /></label>
+          <label>模板风格
+            <select name="template">
+              <option value="technical">技术分析</option>
+              <option value="ai_quant">AI量化</option>
+              <option value="book">书籍推荐</option>
+            </select>
+          </label>
+          <label>输出文件名 <input name="output_name" placeholder="例如：AI炒股_精修版" /></label>
+          <label>文案 <textarea name="script" rows="8" placeholder="没有本地转写能力时，请把文案粘贴到这里。"></textarea></label>
+          <button class="primary" type="submit">开始生成</button>
+        </form>
+
+        <section class="panel">
+          <h2>当前任务</h2>
+          <div id="currentJob" class="empty">还没有任务。</div>
+        </section>
+      </section>
+
+      <section class="panel">
+        <h2>最近任务</h2>
+        <div id="jobList" class="job-list"></div>
+      </section>
+    </main>
+    <script src="/app.js"></script>
+  </body>
+</html>
