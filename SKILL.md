@@ -22,6 +22,31 @@ Do not assume every Codex environment can see or play video. At the start of a v
 
 If a capability is missing, use the best fallback and tell the user what level of verification was possible. For example, if direct playback is unavailable, create dynamic review artifacts with FFmpeg instead of relying on one static screenshot.
 
+After the check, guide the user. Do not merely say a dependency is missing. Explain what is missing, what it unlocks, what quality problem remains without it, and the next install/setup action.
+
+Use this short report shape when anything important is missing:
+
+```text
+Current capability level: [minimal / recommended / full]
+Available:
+- ...
+Missing:
+- FFmpeg: needed for muxing voiceover, extracting motion strips, checking duration/audio streams.
+- HyperFrames CLI: needed for rendering and layout inspection of HTML video projects.
+- Browser/media preview: needed for direct dynamic review of transitions and audio-video timing.
+- Transcription/word timestamps: needed for precise semantic scene boundaries.
+Impact:
+- Without ..., I can still ..., but I cannot reliably verify ...
+Suggested next step:
+- Install/configure ... first because it gives the biggest quality gain.
+```
+
+Capability levels:
+
+- **Minimal:** can write/edit a composition and inspect static files, but cannot render or dynamically verify. Must ask the user to install missing video tools before claiming quality.
+- **Recommended:** has FFmpeg plus either HyperFrames render/inspect or another renderer. Can create final MP4 and motion-review artifacts.
+- **Full:** has renderer, FFmpeg, transcription/word timestamps, and direct browser/media preview. Can do semantic sync plus true dynamic review.
+
 ## Non-Negotiables
 
 - Do not make a landing page or a static slide deck. Build the actual short-video experience.
@@ -39,6 +64,7 @@ If a capability is missing, use the best fallback and tell the user what level o
    - Audio duration and waveform.
    - Transcript with timestamps when possible.
    - Script, book cover, reference video, existing HyperFrames project, and target output name.
+   - Local capability level. If below recommended, explain missing parts and ask/guide before doing production work.
 
 2. Segment by meaning:
    - Group narration into 5-8 scenes for a 45-70 second video.
@@ -121,3 +147,4 @@ Use motion strips to catch problems a single static frame hides:
 - **Hard cuts feel awkward:** use a short light wipe or content fade, but keep it subtle.
 - **Final page appears too early:** delay the book/product card until the narration reaches the recommendation or CTA.
 - **Agent cannot see video playback:** generate motion strips and short review clips; never pretend a static contact sheet proves timing.
+- **User's machine lacks required tooling:** give a capability report, name the missing tool, explain its purpose in this workflow, and recommend the smallest useful install path before continuing.
