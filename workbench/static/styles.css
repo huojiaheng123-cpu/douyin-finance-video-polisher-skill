@@ -64,14 +64,14 @@ main {
 .panel {
   background: rgba(255, 255, 255, 0.82);
   border: 1px solid rgba(16, 19, 26, 0.1);
-  padding: 24px;
+  padding: 22px;
   margin-bottom: 18px;
   box-shadow: 0 18px 44px rgba(16, 19, 26, 0.06);
 }
 
 h1 {
   margin: 0 0 10px;
-  font-size: 42px;
+  font-size: 38px;
   line-height: 1.12;
 }
 
@@ -114,11 +114,24 @@ textarea {
   gap: 10px;
 }
 
+.tool-list {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .tool,
 .job {
   border: 1px solid rgba(16, 19, 26, 0.1);
   background: #fff;
-  padding: 12px;
+  padding: 10px 12px;
+}
+
+.tool small {
+  display: block;
+  margin-top: 5px;
+  color: #10131a;
+  font-size: 12px;
+  line-height: 1.38;
+  overflow-wrap: anywhere;
 }
 
 .ok {
@@ -152,5 +165,9 @@ textarea {
 
   h1 {
     font-size: 31px;
+  }
+
+  .tool-list {
+    grid-template-columns: 1fr;
   }
 }
