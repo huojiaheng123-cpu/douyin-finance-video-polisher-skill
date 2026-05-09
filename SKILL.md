@@ -7,9 +7,20 @@ description: Use when creating or polishing vertical Chinese finance/stock short
 
 ## Purpose
 
-Turn finance narration into a polished 9:16 short video with semantic audio-video sync, Douyin-safe layout, richer visual density, and deterministic verification.
+Turn finance narration into a polished 9:16 short video with semantic audio-video sync, Douyin-safe layout, richer visual density, dynamic motion review, and deterministic verification.
 
 Use this together with `hyperframes`, `hyperframes-cli`, `ffmpeg`, `audio-transcribe`, and `ai-auto-video-editing` when available.
+
+## Capability Bootstrap
+
+Do not assume every Codex environment can see or play video. At the start of a video task, quickly check what is available:
+
+- HyperFrames render/inspect commands.
+- FFmpeg/ffprobe for muxing, metadata, frame extraction, and motion strips.
+- Browser or media-preview capability for opening local HTML/MP4 and watching motion.
+- Speech transcription or word timestamps for voiceover alignment.
+
+If a capability is missing, use the best fallback and tell the user what level of verification was possible. For example, if direct playback is unavailable, create dynamic review artifacts with FFmpeg instead of relying on one static screenshot.
 
 ## Non-Negotiables
 
@@ -20,6 +31,7 @@ Use this together with `hyperframes`, `hyperframes-cli`, `ffmpeg`, `audio-transc
 - Text must be large enough for mobile: hero `76-88px`, card text `28-38px`, tiny labels `22px+`.
 - The video may speak during page transitions, but do not let the next semantic idea start while the previous page is still visually dominant.
 - Never apply one fixed timing rule to every section. Sync to the actual narration meaning.
+- Do not approve a video from one static frame. Motion, transition timing, and audio-video sync must be reviewed dynamically.
 
 ## Workflow
 
@@ -54,15 +66,43 @@ Use this together with `hyperframes`, `hyperframes-cli`, `ffmpeg`, `audio-transc
 
 6. Verify before delivering:
    - Run `hyperframes inspect <project> --samples 28`.
-   - Extract a full contact sheet.
-   - Extract extra contact sheets for suspected sync spans and the last 10-20 seconds.
+   - Review the video dynamically:
+     - Best: open/play the final MP4 or HyperFrames preview and watch the full video, then scrub suspected spans.
+     - Fallback: generate motion contact sheets at `2-4fps` for every scene or suspected span.
+     - Fallback: generate short review clips/GIF/WebP previews for transitions and the final CTA.
+   - Extract a full contact sheet only as a map of the whole video, not as the main quality check.
+   - Extract extra motion contact sheets for suspected sync spans and the last 10-20 seconds.
    - Confirm: 9:16, audio present, no layout issues, no text in unsafe bottom zone, book cover fully visible, no giant black transition, and narration meaning matches the current page.
+
+## Dynamic Review Commands
+
+Use direct playback when available. When it is not available, create motion evidence:
+
+```bash
+# Whole-video map, useful but not enough by itself.
+ffmpeg -y -i final.mp4 -vf "fps=1/8,scale=270:480,tile=3x3" contact.jpg
+
+# Motion strip for a suspected sync span.
+ffmpeg -y -ss 35.5 -t 12 -i final.mp4 -vf "fps=3,scale=180:320,tile=6x6" motion_35_47.jpg
+
+# Short preview clip for real playback in the user's media viewer.
+ffmpeg -y -ss 35.5 -t 12 -i final.mp4 -c copy review_35_47.mp4
+```
+
+Use motion strips to catch problems a single static frame hides:
+
+- A page turn that pauses half a syllable and restarts speech awkwardly.
+- The next sentence starting while the previous page is still on screen.
+- A book card entering before the narration introduces the book.
+- Text that looks fine in one frame but overlaps during entrance animation.
+- Black/large transition shapes covering too much of the frame.
 
 ## Timing Heuristics
 
 - Let page changes land near clause boundaries.
 - It is okay for narration to begin slightly before a page finishes animating if the page's core meaning is already visible.
 - Avoid a hard pause before every page. It feels robotic on short-video platforms.
+- Prefer overlapping speech with the end of a transition only when the new page's main headline is already visible.
 - If a scene has two semantic ideas, split the scene or delay the second visual cluster.
 - When the user reports "the next sentence is being said on the previous page", move the scene boundary earlier or delay the next narration visual cluster; do not globally slow every scene.
 
@@ -71,6 +111,7 @@ Use this together with `hyperframes`, `hyperframes-cli`, `ffmpeg`, `audio-transc
 - Output names should be Chinese and descriptive, e.g. `AI炒股_精修增强版.mp4`.
 - Provide final files as absolute local Markdown links.
 - Summarize only the important changes: typography, safe zone, content richness, sync fixes, verification.
+- State whether the final review used direct playback, motion strips, or static-only fallback.
 
 ## Common Fixes
 
@@ -79,3 +120,4 @@ Use this together with `hyperframes`, `hyperframes-cli`, `ffmpeg`, `audio-transc
 - **Book cover outside frame:** use a bounded book card, keep cover around `335-410px`, and verify by frame extraction.
 - **Hard cuts feel awkward:** use a short light wipe or content fade, but keep it subtle.
 - **Final page appears too early:** delay the book/product card until the narration reaches the recommendation or CTA.
+- **Agent cannot see video playback:** generate motion strips and short review clips; never pretend a static contact sheet proves timing.
