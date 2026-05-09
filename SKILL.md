@@ -27,9 +27,11 @@ python scripts/check_capabilities.py
 # If python is not on PATH, try:
 py scripts/check_capabilities.py
 python3 scripts/check_capabilities.py
+# Optional: allow npx to resolve HyperFrames online:
+python scripts/check_capabilities.py --network
 ```
 
-Use its output as the capability report. If Python is unavailable, do the same checks manually.
+Use its output as the capability report. The default check is local-only and should not download packages. Use `--network` only when the user allows dependency/network checks. If Python is unavailable, do the same checks manually.
 
 If a capability is missing, use the best fallback and tell the user what level of verification was possible. For example, if direct playback is unavailable, create dynamic review artifacts with FFmpeg instead of relying on one static screenshot.
 
@@ -56,7 +58,7 @@ Capability levels:
 
 - **Minimal:** can write/edit a composition and inspect static files, but cannot render or dynamically verify. Must ask the user to install missing video tools before claiming quality.
 - **Recommended:** has FFmpeg plus either HyperFrames render/inspect or another renderer. Can create final MP4 and motion-review artifacts.
-- **Full:** has renderer, FFmpeg, transcription/word timestamps, and direct browser/media preview. Can do semantic sync plus true dynamic review.
+- **Full:** has renderer, FFmpeg, and direct browser/media preview. Can render and dynamically review. Transcription/word timestamps are an extra precision layer for semantic sync.
 
 Install guidance:
 
