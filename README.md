@@ -97,3 +97,22 @@ python scripts/check_capabilities.py --network
 - 配音和画面语义同步
 - 书籍/产品推荐出现时机自然
 - 经过动态复审的竖屏短视频
+
+## 本地生成工作台
+
+内部试用可以启动本地网站：
+
+```bash
+pip install -r requirements.txt
+python scripts/run_workbench.py
+```
+
+然后打开：
+
+```text
+http://127.0.0.1:8787
+```
+
+第一版默认只监听本机地址，不会暴露到公网。页面可以上传 `.wav`、`.mp3`、`.m4a`，填写主题、流量词、模板和文案，然后生成本地 MP4。
+
+如果没有本地转写能力，请先把文案粘贴到页面里。缺少 FFmpeg、HyperFrames 或浏览器预览时，页面会说明缺什么、它有什么用，以及下一步该补什么。
