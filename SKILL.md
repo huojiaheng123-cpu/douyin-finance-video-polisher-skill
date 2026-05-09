@@ -20,6 +20,17 @@ Do not assume every Codex environment can see or play video. At the start of a v
 - Browser or media-preview capability for opening local HTML/MP4 and watching motion.
 - Speech transcription or word timestamps for voiceover alignment.
 
+If this skill includes `scripts/check_capabilities.py`, run it first with:
+
+```bash
+python scripts/check_capabilities.py
+# If python is not on PATH, try:
+py scripts/check_capabilities.py
+python3 scripts/check_capabilities.py
+```
+
+Use its output as the capability report. If Python is unavailable, do the same checks manually.
+
 If a capability is missing, use the best fallback and tell the user what level of verification was possible. For example, if direct playback is unavailable, create dynamic review artifacts with FFmpeg instead of relying on one static screenshot.
 
 After the check, guide the user. Do not merely say a dependency is missing. Explain what is missing, what it unlocks, what quality problem remains without it, and the next install/setup action.
@@ -46,6 +57,16 @@ Capability levels:
 - **Minimal:** can write/edit a composition and inspect static files, but cannot render or dynamically verify. Must ask the user to install missing video tools before claiming quality.
 - **Recommended:** has FFmpeg plus either HyperFrames render/inspect or another renderer. Can create final MP4 and motion-review artifacts.
 - **Full:** has renderer, FFmpeg, transcription/word timestamps, and direct browser/media preview. Can do semantic sync plus true dynamic review.
+
+Install guidance:
+
+| Missing | Why it matters | Suggested fix |
+| --- | --- | --- |
+| FFmpeg | Required for muxing voiceover, extracting frames/motion strips, trimming review clips, and checking audio/video streams. | Install FFmpeg or use a bundled FFmpeg path if the environment provides one. |
+| Node/npm or npx | Needed to run HyperFrames CLI. | Install Node.js LTS. |
+| HyperFrames CLI | Needed to render HTML compositions and run layout inspection. | Use `npx hyperframes@latest ...` or install/configure the HyperFrames plugin/CLI. |
+| Browser/media preview | Needed to actually watch motion, transitions, and sync. | Use the Codex Browser plugin, local browser preview, or generate short MP4 review clips for the user. |
+| Transcription/word timestamps | Needed for precise semantic timing and cloned-voice sync. | Use an installed transcription skill/tool such as Whisper or ElevenLabs Scribe, or ask for a timed transcript. |
 
 ## Non-Negotiables
 
