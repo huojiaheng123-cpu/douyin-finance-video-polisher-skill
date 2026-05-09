@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>抖音财经短视频精修 Skill</title>
+    <meta
+      name="description"
+      content="一个用于制作和精修抖音财经短视频的 Codex skill，支持能力检测、语义分镜、动态复审和质量评分。"
+    />
+    <style>
+      :root {
+        --ink: #10131a;
+        --muted: #5b6573;
+        --line: #d9dfdd;
+        --paper: #fbfbf7;
+        --panel: #ffffff;
+        --gold: #c88f2b;
+        --green: #16886b;
+        --red: #e45a4d;
+        --blue: #245e7e;
+        --shadow: 0 20px 48px rgba(16, 19, 26, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          linear-gradient(rgba(16, 19, 26, 0.055) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(16, 19, 26, 0.055) 1px, transparent 1px),
+          var(--paper);
+        background-size: 44px 44px;
+        font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif;
+        overflow-x: hidden;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        border-bottom: 1px solid rgba(16, 19, 26, 0.08);
+        background: rgba(251, 251, 247, 0.92);
+        backdrop-filter: blur(14px);
+      }
+
+      .nav {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 18px 22px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        border: 2px solid var(--gold);
+        display: grid;
+        place-items: center;
+        color: var(--green);
+        font-weight: 900;
+        background: var(--panel);
+      }
+
+      .brand-title {
+        font-size: 17px;
+        font-weight: 900;
+        white-space: nowrap;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 18px;
+        color: var(--muted);
+        font-size: 14px;
+        font-weight: 800;
+      }
+
+      .nav-links a:hover {
+        color: var(--ink);
+      }
+
+      .repo-link {
+        padding: 9px 12px;
+        border: 1px solid rgba(16, 19, 26, 0.16);
+        background: var(--panel);
+      }
+
+      main {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 48px 22px 80px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.04fr) minmax(320px, 0.96fr);
+        gap: 30px;
+        align-items: stretch;
+        min-height: calc(100vh - 126px);
+      }
+
+      .hero-copy {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 24px;
+        min-width: 0;
+      }
+
+      .eyebrow {
+        width: fit-content;
+        border: 1px solid rgba(200, 143, 43, 0.5);
+        color: #825c1b;
+        background: rgba(255, 255, 255, 0.72);
+        padding: 9px 13px;
+        font-size: 14px;
+        font-weight: 900;
+      }
+
+      h1 {
+        margin: 0;
+        max-width: 820px;
+        font-size: clamp(42px, 6.4vw, 76px);
+        line-height: 1.06;
+        letter-spacing: 0;
+        overflow-wrap: anywhere;
+      }
+
+      .accent-green {
+        color: var(--green);
+      }
+
+      .accent-gold {
+        color: var(--gold);
+      }
+
+      .lead {
+        margin: 0;
+        max-width: 720px;
+        color: var(--muted);
+        font-size: 20px;
+        line-height: 1.72;
+        font-weight: 700;
+        overflow-wrap: anywhere;
+      }
+
+      .quick-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .command-box {
+        border: 1px solid rgba(16, 19, 26, 0.12);
+        background: var(--ink);
+        color: #f7f1df;
+        box-shadow: var(--shadow);
+        min-width: 0;
+      }
+
+      .command-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 13px 14px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        color: rgba(247, 241, 223, 0.82);
+        font-size: 13px;
+        font-weight: 900;
+      }
+
+      .command-head span {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+
+      .copy-btn {
+        flex: 0 0 auto;
+        min-width: 44px;
+        height: 34px;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        background: transparent;
+        color: #fff;
+        cursor: pointer;
+        font-weight: 900;
+      }
+
+      .copy-btn:hover {
+        border-color: var(--gold);
+      }
+
+      pre {
+        margin: 0;
+        padding: 18px;
+        overflow-x: auto;
+        font-size: 15px;
+        line-height: 1.55;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        word-break: break-all;
+      }
+
+      .hero-panel {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 640px;
+      }
+
+      .phone-preview {
+        position: relative;
+        width: min(360px, 100%);
+        aspect-ratio: 9 / 16;
+        border: 10px solid var(--ink);
+        background: #f9f7f0;
+        box-shadow: 0 26px 54px rgba(16, 19, 26, 0.22);
+        overflow: hidden;
+      }
+
+      .phone-preview::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(rgba(16, 19, 26, 0.055) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(16, 19, 26, 0.055) 1px, transparent 1px);
+        background-size: 26px 26px;
+      }
+
+      .phone-content {
+        position: relative;
+        height: 100%;
+        padding: 62px 34px 50px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .phone-kicker {
+        width: fit-content;
+        border: 1px solid rgba(200, 143, 43, 0.5);
+        padding: 5px 8px;
+        font-size: 12px;
+        color: #825c1b;
+        background: rgba(255, 255, 255, 0.75);
+        font-weight: 900;
+      }
+
+      .phone-title {
+        margin: 0;
+        font-size: 34px;
+        line-height: 1.12;
+        font-weight: 900;
+      }
+
+      .video-card {
+        position: relative;
+        background: var(--panel);
+        padding: 18px;
+        border: 1px solid rgba(16, 19, 26, 0.08);
+        box-shadow: 0 14px 34px rgba(16, 19, 26, 0.08);
+      }
+
+      .chart {
+        height: 118px;
+      }
+
+      .metric-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .metric {
+        padding: 12px;
+        background: rgba(22, 136, 107, 0.08);
+        border-left: 4px solid var(--green);
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .timeline {
+        margin-top: auto;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 7px;
+      }
+
+      .timeline span {
+        height: 8px;
+        background: rgba(16, 19, 26, 0.12);
+      }
+
+      .timeline span:nth-child(2),
+      .timeline span:nth-child(4) {
+        background: var(--gold);
+      }
+
+      .section {
+        padding: 68px 0 0;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 22px;
+        margin-bottom: 22px;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: clamp(30px, 4vw, 48px);
+        line-height: 1.1;
+      }
+
+      .section-note {
+        margin: 0;
+        max-width: 520px;
+        color: var(--muted);
+        line-height: 1.65;
+        font-weight: 700;
+      }
+
+      .grid-3,
+      .grid-2 {
+        display: grid;
+        gap: 16px;
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .info-card {
+        background: var(--panel);
+        border: 1px solid rgba(16, 19, 26, 0.09);
+        padding: 24px;
+        min-height: 164px;
+        box-shadow: 0 14px 38px rgba(16, 19, 26, 0.055);
+      }
+
+      .info-card h3 {
+        margin: 0 0 12px;
+        font-size: 20px;
+      }
+
+      .info-card p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.65;
+        font-weight: 700;
+      }
+
+      .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .tag {
+        padding: 8px 10px;
+        background: rgba(36, 94, 126, 0.08);
+        color: var(--blue);
+        font-size: 13px;
+        font-weight: 900;
+      }
+
+      .steps {
+        display: grid;
+        gap: 12px;
+        counter-reset: step;
+      }
+
+      .step {
+        counter-increment: step;
+        display: grid;
+        grid-template-columns: 52px 1fr;
+        align-items: center;
+        gap: 16px;
+        padding: 18px 20px;
+        border: 1px solid rgba(16, 19, 26, 0.09);
+        background: rgba(255, 255, 255, 0.88);
+      }
+
+      .step::before {
+        content: counter(step, decimal-leading-zero);
+        color: var(--green);
+        font-size: 20px;
+        font-weight: 900;
+      }
+
+      .step strong {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .step span {
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .rubric {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--panel);
+        box-shadow: var(--shadow);
+      }
+
+      .rubric th,
+      .rubric td {
+        border: 1px solid rgba(16, 19, 26, 0.1);
+        padding: 16px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .rubric th {
+        background: var(--ink);
+        color: #fff;
+        font-size: 14px;
+      }
+
+      .rubric td {
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .status-strip {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+
+      .status {
+        padding: 18px;
+        background: var(--panel);
+        border: 1px solid rgba(16, 19, 26, 0.1);
+        border-top: 5px solid var(--gold);
+      }
+
+      .status:nth-child(2) {
+        border-top-color: var(--green);
+      }
+
+      .status:nth-child(3) {
+        border-top-color: var(--blue);
+      }
+
+      .status b {
+        display: block;
+        margin-bottom: 7px;
+        font-size: 19px;
+      }
+
+      .status span {
+        color: var(--muted);
+        line-height: 1.55;
+        font-weight: 700;
+      }
+
+      .footer {
+        margin-top: 72px;
+        padding: 28px 0 0;
+        border-top: 1px solid rgba(16, 19, 26, 0.1);
+        color: var(--muted);
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      @media (max-width: 860px) {
+        .site-header,
+        .hero,
+        .quick-actions {
+          max-width: 100%;
+        }
+
+        main {
+          padding: 46px 16px 72px;
+          width: 100%;
+        }
+
+        .nav {
+          align-items: flex-start;
+          flex-direction: column;
+          padding: 16px;
+        }
+
+        .nav-links {
+          width: 100%;
+          gap: 10px 14px;
+          overflow-x: visible;
+          padding-bottom: 0;
+        }
+
+        .brand-title {
+          white-space: normal;
+        }
+
+        .hero,
+        .grid-3,
+        .grid-2,
+        .status-strip {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-panel {
+          min-height: auto;
+        }
+
+        h1 {
+          max-width: 100%;
+          font-size: 30px;
+          line-height: 1.08;
+          word-break: break-all;
+        }
+
+        .lead {
+          font-size: 17px;
+          line-height: 1.68;
+          word-break: break-all;
+        }
+
+        .command-box {
+          width: calc(100vw - 32px);
+          max-width: calc(100vw - 32px);
+          overflow: hidden;
+        }
+
+        pre {
+          overflow-x: hidden;
+        }
+
+        .phone-preview {
+          width: min(330px, 100%);
+        }
+
+        .section-head {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .rubric {
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="主导航">
+        <a class="brand" href="#top" aria-label="回到顶部">
+          <span class="brand-mark">9:16</span>
+          <span class="brand-title">抖音财经短视频精修 Skill</span>
+        </a>
+        <div class="nav-links">
+          <a href="#capability">能力检测</a>
+          <a href="#workflow">做片流程</a>
+          <a href="#patterns">场景配方</a>
+          <a href="#quality">质量标准</a>
+          <a class="repo-link" href="https://github.com/huojiaheng123-cpu/douyin-finance-video-polisher-skill">GitHub</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <div class="eyebrow">Codex Skill · Finance Video Workflow</div>
+          <h1 id="hero-title">把财经配音做成<br /><span class="accent-green">能动态复审</span>的竖屏短视频。</h1>
+          <p class="lead">
+            这个 skill 用来制作和精修抖音财经/股票类短视频：先检查电脑能力，再按配音语义拆段，设计金融画面，最后用动态抽帧或直接预览检查音画同步。
+          </p>
+
+          <div class="quick-actions" id="capability">
+            <div class="command-box">
+              <div class="command-head">
+                <span>第一步：检测电脑视频制作能力</span>
+                <button class="copy-btn" data-copy="python scripts/check_capabilities.py" aria-label="复制检测命令">复制</button>
+              </div>
+              <pre><code>python scripts/check_capabilities.py</code></pre>
+            </div>
+            <div class="command-box">
+              <div class="command-head">
+                <span>调用 skill 的提示词</span>
+                <button
+                  class="copy-btn"
+                  data-copy="用 douyin-finance-video-polisher 帮我把这段财经配音做成 9:16 抖音风格短视频。"
+                  aria-label="复制提示词"
+                >
+                  复制
+                </button>
+              </div>
+              <pre><code>用 douyin-finance-video-polisher
+帮我把这段财经配音做成 9:16 抖音风格短视频。</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-panel" aria-label="竖屏财经视频画面预览">
+          <div class="phone-preview">
+            <div class="phone-content">
+              <span class="phone-kicker">回测验证</span>
+              <h2 class="phone-title">不是多学指标，<br /><span class="accent-green">是先验证它。</span></h2>
+              <div class="video-card">
+                <svg class="chart" viewBox="0 0 280 120" role="img" aria-label="财经曲线示意">
+                  <path d="M16 98 H264" stroke="rgba(16,19,26,.14)" stroke-width="2" />
+                  <path d="M16 64 H264" stroke="rgba(16,19,26,.1)" stroke-width="2" />
+                  <path d="M18 86 C52 70 70 92 98 54 C126 16 150 70 182 48 C214 28 230 82 262 40" fill="none" stroke="#16886b" stroke-width="8" stroke-linecap="round" />
+                  <path d="M18 42 C62 54 94 90 130 76 C164 62 198 86 262 98" fill="none" stroke="#e45a4d" stroke-width="5" stroke-linecap="round" stroke-dasharray="10 10" />
+                </svg>
+              </div>
+              <div class="metric-row">
+                <div class="metric">胜率 56.3%</div>
+                <div class="metric">盈亏比 1.21</div>
+              </div>
+              <div class="timeline" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="workflow">
+        <div class="section-head">
+          <h2>从配音到成片的流程</h2>
+          <p class="section-note">不是把文案平均分成几页，而是根据语义、画面动作和平台安全区设计每一段。</p>
+        </div>
+        <div class="steps">
+          <div class="step"><div><strong>检测电脑能力</strong><span>确认是否能渲染、合音频、抽动态帧、预览视频。</span></div></div>
+          <div class="step"><div><strong>按配音语义分镜</strong><span>根据音频含义拆出 hook、问题、证据、方法、CTA。</span></div></div>
+          <div class="step"><div><strong>设计金融画面</strong><span>用图表、对比卡、回测表、规则列表和书籍页承接文案。</span></div></div>
+          <div class="step"><div><strong>动态复审</strong><span>直接播放或抽 motion strip，检查转场、停顿和音画同步。</span></div></div>
+        </div>
+      </section>
+
+      <section class="section" id="patterns">
+        <div class="section-head">
+          <h2>内置场景配方</h2>
+          <p class="section-note">每条 45-70 秒视频至少使用三种配方，避免整条片子变成“一句话加一张图”。</p>
+        </div>
+        <div class="grid-3">
+          <article class="info-card">
+            <h3>开头反差</h3>
+            <p>用一个痛点问题或反常识观点抓住注意力，再用 2-3 个标签点出常见误区。</p>
+            <div class="tag-list"><span class="tag">Hook</span><span class="tag">痛点</span><span class="tag">误区</span></div>
+          </article>
+          <article class="info-card">
+            <h3>错误认知对比</h3>
+            <p>左边放“你看到的”，右边放“真正的问题”，适合讲指标、战法和 AI 量化。</p>
+            <div class="tag-list"><span class="tag">对比</span><span class="tag">真实原因</span></div>
+          </article>
+          <article class="info-card">
+            <h3>回测证据</h3>
+            <p>用胜率、盈亏比、样本数、资金曲线让观点落地，避免只讲感觉。</p>
+            <div class="tag-list"><span class="tag">胜率</span><span class="tag">盈亏比</span><span class="tag">10年</span></div>
+          </article>
+          <article class="info-card">
+            <h3>规则系统</h3>
+            <p>把买入、卖出、止损、仓位做成步骤，让画面跟着配音逐条出现。</p>
+            <div class="tag-list"><span class="tag">规则</span><span class="tag">验证</span></div>
+          </article>
+          <article class="info-card">
+            <h3>行情图表</h3>
+            <p>用曲线、交叉、信号点和红绿走势来表现 K 线、MACD、KDJ、趋势。</p>
+            <div class="tag-list"><span class="tag">K线</span><span class="tag">信号</span><span class="tag">趋势</span></div>
+          </article>
+          <article class="info-card">
+            <h3>书籍 CTA</h3>
+            <p>只在配音真正讲到书或产品时出现，先文案后封面，避免推荐页抢跑。</p>
+            <div class="tag-list"><span class="tag">书封</span><span class="tag">CTA</span></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>电脑能力等级</h2>
+          <p class="section-note">检测脚本会告诉同事当前电脑能做到哪一步，以及下一步最该补什么。</p>
+        </div>
+        <div class="status-strip">
+          <div class="status"><b>minimal</b><span>只能看文件和改文件，不能可靠渲染或动态复审视频。</span></div>
+          <div class="status"><b>recommended</b><span>可以生成视频，并能抽动态帧检查转场和音画同步。</span></div>
+          <div class="status"><b>full</b><span>可以渲染、合成音频、直接预览视频，并做完整动态复审。</span></div>
+        </div>
+      </section>
+
+      <section class="section" id="quality">
+        <div class="section-head">
+          <h2>交付前质量标准</h2>
+          <p class="section-note">总分至少 10/12；任一项为 0，就先修，不急着交付。</p>
+        </div>
+        <table class="rubric">
+          <thead>
+            <tr>
+              <th>维度</th>
+              <th>检查重点</th>
+              <th>好片标准</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>语义同步</td><td>画面是否跟着配音含义走</td><td>每个视觉元素都在对应短句附近出现</td></tr>
+            <tr><td>视觉密度</td><td>是否只有一句话加一张图</td><td>每页有标题、证据、指标或动作层</td></tr>
+            <tr><td>手机可读性</td><td>字号、安全区、卡片空间</td><td>在手机上清楚，不被平台控件遮挡</td></tr>
+            <tr><td>动态复审</td><td>是否只看静态截图</td><td>播放或 motion strip 检查关键段</td></tr>
+            <tr><td>金融相关性</td><td>画面是否服务财经表达</td><td>图表、规则、表格、回测指标能解释观点</td></tr>
+            <tr><td>CTA 时机</td><td>书籍/产品是否出现太早</td><td>配音讲到推荐时才进入书封页</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <footer class="footer">
+        <span>Douyin Finance Video Polisher Skill</span>
+        <a href="https://github.com/huojiaheng123-cpu/douyin-finance-video-polisher-skill">查看 GitHub 仓库</a>
+      </footer>
+    </main>
+
+    <script>
+      const buttons = document.querySelectorAll("[data-copy]");
+      buttons.forEach((button) => {
+        button.addEventListener("click", async () => {
+          const text = button.getAttribute("data-copy");
+          try {
+            await navigator.clipboard.writeText(text);
+            const old = button.textContent;
+            button.textContent = "已复制";
+            window.setTimeout(() => {
+              button.textContent = old;
+            }, 1200);
+          } catch {
+            button.textContent = "手动复制";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
