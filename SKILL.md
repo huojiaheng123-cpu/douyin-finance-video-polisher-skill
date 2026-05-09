@@ -92,6 +92,7 @@ Install guidance:
    - Scene starts should follow major idea boundaries, not arbitrary equal cuts.
    - Add delayed beats inside each scene so supporting cards appear when that phrase is spoken.
    - Book/product pages should appear only when the narration actually introduces the book/product.
+   - Before authoring visuals, build a scene plan using `references/production_patterns.md`.
 
 3. Use this visual system by default:
    - Canvas: `1080x1920`, white/warm editorial background, faint grid.
@@ -99,12 +100,14 @@ Install guidance:
    - Layout: `padding: 226px 92px 310px`, `headline max-width: 896px`.
    - Transitions: short light/gold-green wipe, not a large black slab.
    - Background ghost words are allowed but must stay faint and inside the canvas.
+   - Use at least 3 different scene recipes across the video, such as hook contrast, false-opponent comparison, verification workflow, result table, market chart, and book CTA.
 
 4. HyperFrames implementation checks:
    - Root must have `data-composition-id`, `data-duration`, `data-width="1080"`, `data-height="1920"`.
    - Audio element must have a stable `id`, e.g. `<audio id="voice" ...>`.
    - Build final layout in CSS first; animate with `gsap.from()` into that layout.
    - Use `data-delay` or per-scene timing offsets for semantic beats.
+   - Animate support elements sequentially inside each scene. Headline, then evidence, then result/CTA; avoid all cards appearing at once.
 
 5. Render and mux:
    - Render the visual with HyperFrames.
@@ -120,6 +123,11 @@ Install guidance:
    - Extract a full contact sheet only as a map of the whole video, not as the main quality check.
    - Extract extra motion contact sheets for suspected sync spans and the last 10-20 seconds.
    - Confirm: 9:16, audio present, no layout issues, no text in unsafe bottom zone, book cover fully visible, no giant black transition, and narration meaning matches the current page.
+   - Score the video with the quality rubric in `references/production_patterns.md`. Fix anything below "good enough" before delivery.
+
+## Production Patterns
+
+For actual video creation, load `references/production_patterns.md`. It contains the scene recipes, finance visual vocabulary, motion rules, and scoring rubric that turn a basic text-on-slide video into a richer short-video composition.
 
 ## Dynamic Review Commands
 
