@@ -1,0 +1,30 @@
+{
+  "lock_purpose": "Record the production environment expected for consistent output. Update only after a deliberate style/rendering review.",
+  "created_for": "douyin-finance-video-polisher",
+  "created_on": "2026-05-13",
+  "required": {
+    "canvas": "1080x1920",
+    "fps": 30,
+    "video_codec": "h264",
+    "audio_codec": "aac",
+    "pixel_format": "yuv420p",
+    "cover_first_frame_sec": 0.6,
+    "cover_required": true
+  },
+  "recommended_tools": {
+    "node": "LTS or bundled Codex runtime",
+    "hyperframes_cli": "Use one fixed version per production batch",
+    "ffmpeg": "6.x or bundled ffmpeg-static",
+    "ffprobe": "6.x or bundled ffprobe-static",
+    "browser": "Chrome or Edge for preview"
+  },
+  "font_requirements": [
+    "Microsoft YaHei UI",
+    "Microsoft YaHei",
+    "SimHei"
+  ],
+  "notes": [
+    "If HyperFrames, browser, or fonts differ, expect small layout or timing differences.",
+    "Do not publish from a machine below the recommended capability level unless the user accepts degraded verification."
+  ]
+}

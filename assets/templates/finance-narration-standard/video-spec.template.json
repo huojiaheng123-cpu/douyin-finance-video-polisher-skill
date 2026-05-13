@@ -1,0 +1,74 @@
+{
+  "title": "金融口播标准模板",
+  "duration_sec": 60,
+  "voiceover": "assets/voiceover.wav",
+  "book_cover": "assets/book-cover.png",
+  "cover": {
+    "required": true,
+    "file": "cover.png",
+    "first_frame_sec": 0.6,
+    "rule": "final MP4 must prepend this cover before the rendered narration video"
+  },
+  "scenes": [
+    {
+      "id": "s1",
+      "start": 0,
+      "duration": 7,
+      "recipe": "hook-contrast",
+      "eyebrow": "短视频开场",
+      "headline": "别再把指标当答案",
+      "subtitle": "先问它有没有被验证",
+      "beats": ["看见信号", "先做回测", "再谈执行"]
+    },
+    {
+      "id": "s2",
+      "start": 7,
+      "duration": 10,
+      "recipe": "false-opponent",
+      "eyebrow": "真正的问题",
+      "headline": "你亏的不是指标",
+      "subtitle": "而是没有流程",
+      "beats": ["入场规则", "止损规则", "复盘规则"]
+    },
+    {
+      "id": "s3",
+      "start": 17,
+      "duration": 11,
+      "recipe": "rule-system",
+      "eyebrow": "执行框架",
+      "headline": "交易差距在执行",
+      "subtitle": "知道方法不等于做得到",
+      "beats": ["条件出现", "规则确认", "风险先行"]
+    },
+    {
+      "id": "s4",
+      "start": 28,
+      "duration": 12,
+      "recipe": "backtest-evidence",
+      "eyebrow": "数据验证",
+      "headline": "少一点感觉交易",
+      "subtitle": "多一点规则验证",
+      "beats": ["样本", "胜率", "回撤"]
+    },
+    {
+      "id": "s5",
+      "start": 40,
+      "duration": 10,
+      "recipe": "market-chart",
+      "eyebrow": "信号过滤",
+      "headline": "均线不是买卖按钮",
+      "subtitle": "它只提示趋势，不替你决策",
+      "beats": ["趋势过滤", "规则确认", "风险先行"]
+    },
+    {
+      "id": "s6",
+      "start": 50,
+      "duration": 10,
+      "recipe": "book-cta",
+      "eyebrow": "工具书推荐",
+      "headline": "量化不是天才专利",
+      "subtitle": "本质是规则和验证",
+      "beats": ["AI工具", "第一步", "概率的朋友"]
+    }
+  ]
+}

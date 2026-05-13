@@ -1,0 +1,47 @@
+{
+  "id": "reference-1-short-finance",
+  "display_name": "模板2：指标验证短版",
+  "source_video": "template-reference.mp4",
+  "contact_sheet": "contact-sheet.jpg",
+  "media": {
+    "width": 720,
+    "height": 1280,
+    "fps": 30,
+    "duration_sec": 56.24,
+    "video_codec": "h264",
+    "audio_codec": "aac",
+    "audio_sample_rate": 22050
+  },
+  "cover_policy": {
+    "required": true,
+    "first_frame_sec": 0.6,
+    "output": "cover.png",
+    "style": "finance new-media cover with large hook, book/trust cue, three bullets, and core conclusion"
+  },
+  "best_for": [
+    "60秒以内金融观点短视频",
+    "指标不够、必须回测验证这一类主题",
+    "结尾自然过渡到书籍或工具推荐"
+  ],
+  "structure": [
+    "0.6秒封面首帧（必需）",
+    "开场指出误区：不是指标不够多",
+    "表格证明：没验证过的指标不管用",
+    "成本/亏损提醒",
+    "回测曲线或数据验证",
+    "三项结果表",
+    "书籍/产品 CTA"
+  ],
+  "style_notes": [
+    "画面更紧凑，单页信息密度高",
+    "红色用于亏损、无效或风险提醒",
+    "金色用于结论和重点强调",
+    "CTA 页以书封卡片为中心",
+    "源视频为 720x1280，复用到 1080x1920 时应等比放大或按模板重排"
+  ],
+  "reuse_rules": [
+    "新视频如果是短平快观点加验证，优先套这个模板。",
+    "保持 5-6 页节奏，避免扩成过长讲解。",
+    "如果最终交付要求 1080x1920，应重排为 1080x1920，而不是只简单拉伸。"
+  ]
+}

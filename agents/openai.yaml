@@ -1,0 +1,8 @@
+interface:
+  display_name: "Douyin Finance Video Polisher"
+  short_description: "Polish Chinese finance short videos using a checked environment and bundled house-style template."
+  brand_color: "#D7AA55"
+  default_prompt: "Use $douyin-finance-video-polisher to check the environment, initialize the finance narration template, then make this voiceover into a polished 9:16 Douyin-style video."
+
+policy:
+  allow_implicit_invocation: true
