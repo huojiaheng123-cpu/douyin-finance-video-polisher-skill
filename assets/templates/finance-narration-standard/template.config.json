@@ -1,0 +1,44 @@
+{
+  "template_name": "finance-narration-standard",
+  "template_version": "2026-05-13",
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bottom_safe_y": 1540
+  },
+  "visual_identity": {
+    "font_stack": ["Microsoft YaHei UI", "Microsoft YaHei", "SimHei", "Arial", "sans-serif"],
+    "colors": {
+      "ink": "#141414",
+      "muted": "#6b6256",
+      "signal_green": "#00785d",
+      "gold": "#b38b42",
+      "warning_red": "#df605d",
+      "card_white": "#fffdf7",
+      "deep_card": "#101820",
+      "background_a": "#fbf7ee",
+      "background_b": "#eef6f0"
+    }
+  },
+  "layout": {
+    "page_padding": "92px 92px 310px",
+    "cover_card": {
+      "x": 72,
+      "y": 553,
+      "width": 930,
+      "height": 548,
+      "radius": 22
+    },
+    "headline_size_px": [74, 88],
+    "cover_headline_size_px": [86, 96],
+    "support_text_size_px": [30, 42]
+  },
+  "render_expectations": {
+    "required_capability_level": "recommended",
+    "required_tools": ["FFmpeg", "ffprobe", "HyperFrames CLI"],
+    "cover_required": true,
+    "cover_first_frame_sec": 0.6,
+    "review": ["cover first frame exists", "hyperframes inspect", "ffprobe stream check", "motion strip or direct playback"]
+  }
+}

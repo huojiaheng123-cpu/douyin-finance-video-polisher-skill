@@ -1,0 +1,92 @@
+{
+  "version": "2026-05-14",
+  "standard_video_count": 7,
+  "rule": "Before making a house-style finance information-animation video, inspect the closest standard video family plus at least one motion sheet. Use these as standards, not optional examples.",
+  "families": [
+    {
+      "id": "va-information-animation",
+      "name": "VA 信息动画标准",
+      "use_when": "VA/CDVA/指标解释/规则验证/裸K/带鱼系统等知识解释型视频",
+      "standards": ["va-01-cognition", "va-02-practice", "va-03-compare"]
+    },
+    {
+      "id": "book-endorsement-lead",
+      "name": "背书与结尾引流标准",
+      "use_when": "需要书封、IP故事、信任背书、价值挖掘、结尾轻引流的视频",
+      "standards": ["endorse-01-curiosity", "endorse-02-ip-story", "endorse-03-value"]
+    },
+    {
+      "id": "ranking-blackhorse",
+      "name": "榜单黑马标准",
+      "use_when": "榜单、排名、黑马、产品/书籍排位、长一点的榜单叙事视频",
+      "standards": ["rank-jd-blackhorse"]
+    }
+  ],
+  "standards": [
+    {
+      "id": "va-01-cognition",
+      "video": "videos/va-01-cognition.mp4",
+      "motion": ["motion-sheets/va-01-motion-0-70.jpg"],
+      "contact": "contact-sheets/va-01-contact.jpg",
+      "first_frame": "first-frames/va-01-first-frame.jpg",
+      "focus": ["反常识开场", "指标冲突", "VA定义", "语义触发信息动画"]
+    },
+    {
+      "id": "va-02-practice",
+      "video": "videos/va-02-practice.mp4",
+      "motion": ["motion-sheets/va-02-motion-0-70.jpg"],
+      "contact": "contact-sheets/va-02-contact.jpg",
+      "first_frame": "first-frames/va-02-first-frame.jpg",
+      "focus": ["实战教学", "规则拆解", "K线实体说明", "逐步验证"]
+    },
+    {
+      "id": "va-03-compare",
+      "video": "videos/va-03-compare.mp4",
+      "motion": ["motion-sheets/va-03-motion-0-70.jpg"],
+      "contact": "contact-sheets/va-03-contact.jpg",
+      "first_frame": "first-frames/va-03-first-frame.jpg",
+      "focus": ["对比思辨", "金叉死叉 vs VA", "带鱼系统", "结论条节奏"]
+    },
+    {
+      "id": "endorse-01-curiosity",
+      "video": "videos/endorse-01-curiosity.mp4",
+      "motion": ["motion-sheets/endorse-01-motion-0-60.jpg"],
+      "contact": "contact-sheets/endorse-01-contact.jpg",
+      "dynamic_contact": "dynamic-contact-sheets/endorse-01-dynamic-contact.jpg",
+      "first_frame": "first-frames/endorse-01-first-frame.jpg",
+      "last_frame": "last-frames/endorse-01-last-frame.jpg",
+      "focus": ["好奇钩子", "书封信任", "轻引流", "结尾不硬广"]
+    },
+    {
+      "id": "endorse-02-ip-story",
+      "video": "videos/endorse-02-ip-story.mp4",
+      "motion": ["motion-sheets/endorse-02-motion-0-60.jpg"],
+      "contact": "contact-sheets/endorse-02-contact.jpg",
+      "dynamic_contact": "dynamic-contact-sheets/endorse-02-dynamic-contact.jpg",
+      "first_frame": "first-frames/endorse-02-first-frame.jpg",
+      "last_frame": "last-frames/endorse-02-last-frame.jpg",
+      "focus": ["IP故事", "人物/方法信任", "书封承接", "引流节奏"]
+    },
+    {
+      "id": "endorse-03-value",
+      "video": "videos/endorse-03-value.mp4",
+      "motion": ["motion-sheets/endorse-03-motion-0-60.jpg"],
+      "contact": "contact-sheets/endorse-03-contact.jpg",
+      "dynamic_contact": "dynamic-contact-sheets/endorse-03-dynamic-contact.jpg",
+      "first_frame": "first-frames/endorse-03-first-frame.jpg",
+      "last_frame": "last-frames/endorse-03-last-frame.jpg",
+      "focus": ["价值挖掘", "方法背书", "结尾转化", "书封停留"]
+    },
+    {
+      "id": "rank-jd-blackhorse",
+      "video": "videos/rank-jd-blackhorse.mp4",
+      "motion": [
+        "motion-sheets/rank-jd-blackhorse-motion-0-70.jpg",
+        "motion-sheets/rank-jd-blackhorse-motion-110-180.jpg"
+      ],
+      "contact": "contact-sheets/rank-jd-blackhorse-contact.jpg",
+      "first_frame": "first-frames/rank-jd-blackhorse-first-frame.jpg",
+      "focus": ["榜单叙事", "黑马排位", "长线节奏", "排名证据和书封承接"]
+    }
+  ]
+}

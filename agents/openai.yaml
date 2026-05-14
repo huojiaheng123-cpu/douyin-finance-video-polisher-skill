@@ -1,8 +1,8 @@
 interface:
   display_name: "Douyin Finance Video Polisher"
-  short_description: "Polish Chinese finance short videos with synced narration and safe layouts."
+  short_description: "Make Chinese finance information-animation videos from voiceovers and references."
   brand_color: "#D7AA55"
-  default_prompt: "Use $douyin-finance-video-polisher to make this finance voiceover into a polished 9:16 Douyin-style video."
+  default_prompt: "Use $douyin-finance-video-polisher to make this finance voiceover into a polished 9:16 Douyin-style information-animation video matching the bundled references."
 
 policy:
   allow_implicit_invocation: true

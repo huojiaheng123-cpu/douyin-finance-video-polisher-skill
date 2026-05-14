@@ -2,6 +2,20 @@
 
 Use this reference when turning a finance script or voiceover into the actual video plan and composition.
 
+## House-Style Target
+
+The target is a clean finance information-animation segment, not a course PPT, subtitle video, or marketing poster. It should feel like a white/warm-white financial editorial board driven by narration.
+
+The strongest version alternates page forms every 4-7 seconds: hook, chart/table evidence, rule explanation, comparison, backtest metrics, and book/product proof. Keep the motion purposeful: each entrance should reveal the idea currently being spoken.
+
+Before creating a plan for the owner's style, inspect `references/house_style_memory.md`, `assets/style-references/reference-manifest.json`, and the bundled motion sheets under `assets/style-references/motion-sheets/`.
+
+The 7 standard videos cover three families:
+
+- VA information animation: rule explanation, indicator contrast, K-line logic, semantic page turns.
+- Book endorsement/lead: curiosity hook, IP story, value mining, book cover trust, light conversion.
+- Ranking blackhorse: ranking evidence, blackhorse narrative, longer pacing, product/book ranking proof.
+
 ## Scene Plan Template
 
 Before writing HyperFrames HTML, create a compact plan:
@@ -16,6 +30,7 @@ Each scene must have:
 - One visual metaphor or evidence layer.
 - At least two timed support beats unless it is a very short hook.
 - A reason for the page to exist at that exact audio moment.
+- Final screen text source: user script/PDF/approved draft, not raw ASR.
 
 ## Scene Recipes
 
@@ -74,6 +89,26 @@ Use only when the narration introduces the book/product.
 - Motion: text first, book cover next, tags last.
 - Avoid: book cover off-frame, book too early, or the book dominating the whole video before the CTA.
 
+## Ending Hook And Book Cover
+
+Use this when the ending has a book cover, traffic guidance, private-domain prompt, QR cue, search cue, or a soft sale.
+
+The ending is a conversion beat, not a label called "book recommendation". Reserve enough time, normally 6-12 seconds, and build it in this order:
+
+1. **Return hook:** one viewer-facing line that closes the original pain point, e.g. `别再凭感觉试指标`.
+2. **Trust proof:** show the book/tool cover as a bounded card, preferably with a small shadow and 2-3 tags such as `回测表`, `指标验证`, `K线形态`.
+3. **Useful reason:** one short subtitle explaining why the viewer should continue, e.g. `先查数据，再决定要不要学`.
+4. **Soft action:** only if the narration contains it, use viewer-facing wording such as `可以搜来看看`, `先从验证表开始`, or `想系统看，就从这本开始`.
+
+Rules:
+
+- The book cover should usually be visible for at least 3 seconds in the final segment.
+- Keep the cover fully inside the safe area; common width is `335-410px` on 1080x1920.
+- Do not make the book appear before the narration introduces the book, source, author, method, or final resource.
+- Do not write production labels on screen: avoid `书名登场`, `背书推荐`, `行动指令`, `工具书推荐`, or `CTA`.
+- A soft CTA may exist, but it must be audience-facing and match the spoken narration.
+- If the book cover is unavailable, create a neutral bounded placeholder only after telling the user the real cover is missing; do not pretend it is the real book.
+
 ## Finance Visual Vocabulary
 
 Prefer finance-native elements instead of generic decoration:
@@ -100,6 +135,7 @@ Avoid:
 - Transition can overlap with speech only when the new headline is already readable.
 - Use short light wipes or fades. Do not use a large black slab unless the style explicitly calls for it.
 - For a "static-looking" scene, animate the evidence layer: chart draw, row reveal, metric count-in, card flip, highlight sweep, or marker drop.
+- Dark conclusion bars should appear near the spoken conclusion, not at scene start.
 
 ## Density Targets
 

@@ -1,0 +1,46 @@
+{
+  "id": "tanlun-ma-false-signal-final",
+  "display_name": "模板1：弹论1 均线假信号长版",
+  "source_video": "template-reference.mp4",
+  "contact_sheet": "contact-sheet.jpg",
+  "media": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "duration_sec": 177.92,
+    "video_codec": "h264",
+    "audio_codec": "aac",
+    "audio_sample_rate": 48000
+  },
+  "cover_policy": {
+    "required": true,
+    "first_frame_sec": 0.6,
+    "output": "cover.png",
+    "style": "finance new-media cover with large hook, book/trust cue, three bullets, and core conclusion"
+  },
+  "best_for": [
+    "2-3分钟金融口播长版",
+    "封面钩子加多页论证",
+    "讲清一个交易误区的成因、错误做法、修正流程和结论"
+  ],
+  "structure": [
+    "0.6秒封面首帧（必需）",
+    "开场反常识钩子",
+    "趋势/噪音对比图",
+    "上部/中部/下部区间拆解",
+    "规则或弹论总结页",
+    "结尾行动提示"
+  ],
+  "style_notes": [
+    "暖白到浅绿背景",
+    "大号黑体标题，关键词用信号绿强调",
+    "金融图表、表格和区间卡作为主要证据层",
+    "底部保留平台字幕安全区",
+    "适合保留封面压缩版作为发布成品"
+  ],
+  "reuse_rules": [
+    "新视频如果是长逻辑讲解，优先套这个模板。",
+    "按语义替换每页标题、证据卡、图表标签，不要只替换字幕。",
+    "时长可伸缩，但必须保留多页论证节奏和动态复查。"
+  ]
+}

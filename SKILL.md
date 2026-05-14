@@ -1,6 +1,6 @@
 ---
 name: douyin-finance-video-polisher
-description: Use when creating or polishing vertical Chinese finance/stock short videos from scripts, voiceovers, cloned voices, book covers, or HyperFrames projects for Douyin/TikTok style publishing.
+description: Use when creating or polishing vertical Chinese finance/stock information-animation videos from voiceovers, scripts, PDFs, book covers, reference videos, or HyperFrames projects for Douyin/TikTok style publishing.
 ---
 
 # Douyin Finance Video Polisher
@@ -11,31 +11,78 @@ Turn finance narration into a polished 9:16 short video with semantic audio-vide
 
 Use this together with `hyperframes`, `hyperframes-cli`, `ffmpeg`, `audio-transcribe`, and `ai-auto-video-editing` when available.
 
-## Capability Bootstrap
+## First-Run Environment Gate
 
-Do not assume every Codex environment can see or play video. At the start of a video task, quickly check what is available:
+Always run the environment check before planning scenes, writing HyperFrames code, rendering, or promising video quality. A missing renderer, FFmpeg, or preview path changes the output quality and verification standard, so do not skip this gate.
 
-- HyperFrames render/inspect commands.
-- FFmpeg/ffprobe for muxing, metadata, frame extraction, and motion strips.
-- Browser or media-preview capability for opening local HTML/MP4 and watching motion.
-- Speech transcription or word timestamps for voiceover alignment.
-
-If this skill includes `scripts/check_capabilities.py`, run it first with:
+From the skill root, run:
 
 ```bash
-python scripts/check_capabilities.py
+python scripts/check_capabilities.py --require recommended
 # If python is not on PATH, try:
-py scripts/check_capabilities.py
-python3 scripts/check_capabilities.py
-# Optional: allow npx to resolve HyperFrames online:
-python scripts/check_capabilities.py --network
+py scripts/check_capabilities.py --require recommended
+python3 scripts/check_capabilities.py --require recommended
+# On Windows without Python, use:
+powershell -ExecutionPolicy Bypass -File scripts/check_capabilities.ps1 -Require recommended
 ```
 
-Use its output as the capability report. The default check is local-only and should not download packages. Use `--network` only when the user allows dependency/network checks. If Python is unavailable, do the same checks manually.
+Rules:
 
-If a capability is missing, use the best fallback and tell the user what level of verification was possible. For example, if direct playback is unavailable, create dynamic review artifacts with FFmpeg instead of relying on one static screenshot.
+- If the check reaches `recommended` or `full`, continue production.
+- If the check is below `recommended`, pause production work and guide setup first. Read `references/environment_setup.md`, name the missing capability, explain the quality impact, and give the smallest useful fix.
+- Only continue in degraded mode when the user explicitly asks to proceed without fixing the environment. In that case, state which verification claims cannot be made.
+- Use `--network` only after the user allows dependency/network checks. The default doctor is local-only and must not download packages.
+- Use `--json` when you need machine-readable results for an automation or wrapper script.
 
-After the check, guide the user. Do not merely say a dependency is missing. Explain what is missing, what it unlocks, what quality problem remains without it, and the next install/setup action.
+Do not merely say a dependency is missing. Explain what is missing, what it unlocks, what quality problem remains without it, and the next install/setup action.
+
+Environment gotchas:
+
+- On Windows, `python` may be missing even when `py` exists; use the PowerShell doctor if Python cannot start.
+- In sandboxed Codex sessions, the process home may differ from the user's real home. The doctor checks both `Path.home()` and the current workspace's `C:\Users\<name>` owner directory so bundled FFmpeg tools are not missed.
+- FFmpeg/ffprobe can be available as bundled Node packages without being on `PATH`; prefer detected absolute paths over telling the user to reinstall.
+
+## House-Style Memory Gate
+
+If the user asks for a voiceover-based finance information animation, the previous satisfactory style, VA/CDVA videos, endorsement/book-cover lead videos, ranking/blackhorse videos, or "make it like the reference", read `references/house_style_memory.md` before planning. Inspect `assets/style-references/reference-manifest.json`, then inspect the closest bundled standard videos or at least their motion sheets under `assets/style-references/`. The 7 bundled standards are the quality target, not optional examples. Do not rely on memory alone.
+
+When screen text, VA/CDVA terminology, 带鱼/短鱼, author names, or ASR corrections matter, read `references/text_and_terms.md`. ASR is timing evidence only; final on-screen copy must come from the user's script, PDF, or approved draft.
+
+If the video ends with a book, course, tool, QR, private-domain prompt, or other lead-generation element, read the "Ending Hook And Book Cover" section in `references/production_patterns.md`. Treat the book cover as a trust/continuation asset, not decoration.
+
+Before delivering any final MP4, read `references/final_review.md` and perform the required layout review. The review must include frame-by-frame or high-frequency frame inspection for layout, text, transitions, safe zones, and book/lead endings.
+
+## Template-First Production
+
+For videos that should match the owner's house style, start from the bundled template instead of building a composition from scratch:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/init_finance_template.ps1 -OutDir <project-dir>
+# Or start from one of the two registered video templates:
+powershell -ExecutionPolicy Bypass -File scripts/init_finance_template.ps1 -OutDir <project-dir> -Template tanlun-ma-false-signal-final
+powershell -ExecutionPolicy Bypass -File scripts/init_finance_template.ps1 -OutDir <project-dir> -Template reference-1-short-finance
+```
+
+Read `assets/templates/templates.manifest.json` before choosing a template. The registered video templates are:
+
+- `tanlun-ma-false-signal-final`: long 1080x1920 finance explainer with multi-page argument.
+- `reference-1-short-finance`: short 720x1280 finance explainer with compact indicator-validation and book CTA structure.
+
+Cover rule: both registered video templates require a cover. Always create `cover.png`, then prepend it as a 0.6s first frame in the final MP4. Do not use "needs cover" as a template-selection criterion.
+
+Use `assets/templates/finance-narration-standard/` as the editable scaffold:
+
+- `DESIGN.md`: exact visual identity, typography, safe zones, and motion rules.
+- `template.config.json`: canvas, palette, layout, and verification expectations.
+- `video-spec.template.json`: six-scene finance narration structure.
+- `cover-spec.template.json`: cover layout inputs.
+- `index.html`: HyperFrames composition template.
+- `reference-cover.png`: visual reference for the expected cover style.
+- `environment.lock.json`: production environment expectations.
+
+When initializing from a registered template, the script also creates `template-reference/` containing `template-reference.mp4`, `contact-sheet.jpg`, and `template.profile.json`. Use those as the visual matching target.
+
+After copying the template, replace only the task-specific inputs first: voiceover, book/product cover, transcript timings, titles, and beats. Keep `DESIGN.md` and `template.config.json` unchanged unless the user intentionally changes the style.
 
 Use this short report shape when anything important is missing:
 
@@ -75,6 +122,9 @@ Install guidance:
 - Do not make a landing page or a static slide deck. Build the actual short-video experience.
 - Do not add full subtitles unless the user asks. Leave room for platform captions.
 - Do not use one sentence plus one image as the whole scene. Each main scene needs a headline plus 2-4 supporting visual elements: cards, chips, table rows, chart strokes, callouts, book/product card, or comparison panels.
+- Do not use production labels as screen text: `书名登场`, `背书推荐`, `行动指令`, `第一篇`, `信息动画素材`, `同步预览`, `静音版`, `素材区`, `成品区`, or similar internal labels.
+- Do not use ASR text as final screen text. Use ASR only for timing; correct screen copy against the user's draft, PDF, or `references/text_and_terms.md`.
+- If the ending has lead generation, reserve a real final beat for it: problem recap, trust proof/book cover, and a light viewer-facing action. Do not just flash the book cover in the last second.
 - Keep a Douyin bottom safe zone. Avoid important text below roughly `y=1540` on a 1080x1920 canvas; keep final content above the player/caption area.
 - Text must be large enough for mobile: hero `76-88px`, card text `28-38px`, tiny labels `22px+`.
 - The video may speak during page transitions, but do not let the next semantic idea start while the previous page is still visually dominant.
@@ -84,16 +134,22 @@ Install guidance:
 ## Workflow
 
 1. Inspect inputs:
+   - Run the first-run environment gate and resolve missing core tooling before production.
+   - Run the house-style memory gate for voiceover-driven finance information animation.
+   - If matching the owner's style matters, initialize from `assets/templates/finance-narration-standard/` before writing new composition code.
    - Audio duration and waveform.
    - Transcript with timestamps when possible.
-   - Script, book cover, reference video, existing HyperFrames project, and target output name.
-   - Local capability level. If below recommended, explain missing parts and ask/guide before doing production work.
+   - Script/PDF/approved draft for final screen text.
+   - Book cover/lead asset if the ending has hook, trust proof, or traffic guidance. Store it as `assets/book-cover.png` in template projects.
+   - Reference video, existing HyperFrames project, and target output name.
+   - Local capability level. If below recommended, do setup guidance first unless the user explicitly accepts degraded output.
 
 2. Segment by meaning:
    - Group narration into 5-8 scenes for a 45-70 second video.
    - Scene starts should follow major idea boundaries, not arbitrary equal cuts.
    - Add delayed beats inside each scene so supporting cards appear when that phrase is spoken.
    - Book/product pages should appear only when the narration actually introduces the book/product.
+   - For lead-generation endings, reserve the final 6-12 seconds for: "why this matters now" hook, book/tool proof, 2-3 useful tags, and a soft action phrase if the narration contains one.
    - Before authoring visuals, build a scene plan using `references/production_patterns.md`.
 
 3. Use this visual system by default:
@@ -115,21 +171,38 @@ Install guidance:
    - Render the visual with HyperFrames.
    - If HyperFrames audio is unreliable or silent, mux the original voiceover with FFmpeg:
      `ffmpeg -y -i visual.mp4 -i voice.wav -map 0:v:0 -map 1:a:0 -c:v copy -c:a aac -b:a 160k -shortest final.mp4`
+   - Generate `cover.png` for the selected template, then prepend it to the final MP4 with `scripts/prepend_cover.ps1` when the output is intended for Douyin publishing.
 
 6. Verify before delivering:
+   - Read `references/final_review.md` and create review artifacts outside the final-output folder.
    - Run `hyperframes inspect <project> --samples 28`.
    - Review the video dynamically:
      - Best: open/play the final MP4 or HyperFrames preview and watch the full video, then scrub suspected spans.
      - Fallback: generate motion contact sheets at `2-4fps` for every scene or suspected span.
      - Fallback: generate short review clips/GIF/WebP previews for transitions and the final CTA.
+   - Do a frame-by-frame or high-frequency frame pass:
+     - Under 90 seconds: export every frame or at least every 2nd frame.
+     - Longer videos: export every frame around transitions and every 4th-6th frame elsewhere.
+     - Always export every frame for the final 10-15 seconds when it contains a book cover, ranking, QR, or traffic guidance.
    - Extract a full contact sheet only as a map of the whole video, not as the main quality check.
    - Extract extra motion contact sheets for suspected sync spans and the last 10-20 seconds.
-   - Confirm: 9:16, audio present, no layout issues, no text in unsafe bottom zone, book cover fully visible, no giant black transition, and narration meaning matches the current page.
+   - Search source files and scene plans for banned production labels before final render.
+   - Confirm: 9:16, audio present, first frame is the designed cover, no layout issues, no text in unsafe bottom zone, book cover fully visible, ending hook/lead beat is not rushed, no giant black transition, and narration meaning matches the current page.
    - Score the video with the quality rubric in `references/production_patterns.md`. Fix anything below "good enough" before delivery.
 
 ## Production Patterns
 
 For actual video creation, load `references/production_patterns.md`. It contains the scene recipes, finance visual vocabulary, motion rules, and scoring rubric that turn a basic text-on-slide video into a richer short-video composition.
+
+For house style and reference-asset matching, load `references/house_style_memory.md`.
+
+For VA/CDVA terminology, banned screen labels, and ASR correction rules, load `references/text_and_terms.md`.
+
+For delivery QA, layout inspection, frame-by-frame checking, and final review commands, load `references/final_review.md`.
+
+## Environment Setup Reference
+
+When the doctor reports missing or unconfirmed capabilities, load `references/environment_setup.md`. It contains the setup decision tree, common Windows paths, and the quality impact of each missing dependency. Use it before asking broad setup questions.
 
 ## Dynamic Review Commands
 
@@ -175,6 +248,7 @@ Use motion strips to catch problems a single static frame hides:
 - **Too much bottom blank:** increase usable vertical area while preserving the bottom safe zone; move ghost words lower, not core text.
 - **Text too small:** raise headline/card/table sizes before adding more decorative elements.
 - **Book cover outside frame:** use a bounded book card, keep cover around `335-410px`, and verify by frame extraction.
+- **Weak ending/lead:** add a final hook line, book/tool proof, 2-3 concrete benefit tags, and a soft action phrase tied to the narration; keep it viewer-facing.
 - **Hard cuts feel awkward:** use a short light wipe or content fade, but keep it subtle.
 - **Final page appears too early:** delay the book/product card until the narration reaches the recommendation or CTA.
 - **Agent cannot see video playback:** generate motion strips and short review clips; never pretend a static contact sheet proves timing.

@@ -1,0 +1,42 @@
+{
+  "template_gallery_version": "2026-05-13",
+  "default_scaffold": "finance-narration-standard",
+  "global_requirements": {
+    "cover_required": true,
+    "cover_first_frame_sec": 0.6,
+    "cover_output": "cover.png",
+    "final_video_must_start_with_cover": true
+  },
+  "video_templates": [
+    {
+      "id": "tanlun-ma-false-signal-final",
+      "display_name": "模板1：弹论1 均线假信号长版",
+      "path": "tanlun-ma-false-signal-final",
+      "source_video": "tanlun-ma-false-signal-final/template-reference.mp4",
+      "profile": "tanlun-ma-false-signal-final/template.profile.json",
+      "contact_sheet": "tanlun-ma-false-signal-final/contact-sheet.jpg",
+      "duration_sec": 177.92,
+      "resolution": "1080x1920",
+      "recommended_use": "2-3分钟金融口播长版、多页论证；必须生成封面并作为首帧"
+    },
+    {
+      "id": "reference-1-short-finance",
+      "display_name": "模板2：指标验证短版",
+      "path": "reference-1-short-finance",
+      "source_video": "reference-1-short-finance/template-reference.mp4",
+      "profile": "reference-1-short-finance/template.profile.json",
+      "contact_sheet": "reference-1-short-finance/contact-sheet.jpg",
+      "duration_sec": 56.24,
+      "resolution": "720x1280",
+      "recommended_use": "60秒以内观点短视频、指标验证、书籍CTA；必须生成封面并作为首帧"
+    }
+  ],
+  "scaffold_templates": [
+    {
+      "id": "finance-narration-standard",
+      "display_name": "金融口播标准工程脚手架",
+      "path": "finance-narration-standard",
+      "recommended_use": "按模板1/模板2的风格新建可编辑 HyperFrames 工程"
+    }
+  ]
+}

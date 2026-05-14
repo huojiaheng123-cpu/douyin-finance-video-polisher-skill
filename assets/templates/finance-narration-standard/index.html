@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Finance Narration Standard</title>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <style>
+    :root {
+      --ink: #141414;
+      --muted: #6b6256;
+      --green: #00785d;
+      --gold: #b38b42;
+      --red: #df605d;
+      --card: #fffdf7;
+      --deep: #101820;
+      --bg-a: #fbf7ee;
+      --bg-b: #eef6f0;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: #111;
+      font-family: "Microsoft YaHei UI", "Microsoft YaHei", SimHei, Arial, sans-serif;
+      letter-spacing: 0;
+    }
+
+    [data-composition-id="finance-narration-standard"] {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      color: var(--ink);
+      background:
+        linear-gradient(118deg, rgba(251, 247, 238, 0.98), rgba(238, 246, 240, 0.98)),
+        repeating-linear-gradient(90deg, rgba(179, 139, 66, 0.04) 0 1px, transparent 1px 72px);
+    }
+
+    .scene {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 116px 92px 310px;
+      gap: 34px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      align-self: flex-start;
+      padding: 11px 20px;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--gold);
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .headline {
+      max-width: 896px;
+      margin: 0;
+      font-size: 84px;
+      line-height: 1.08;
+      font-weight: 900;
+    }
+
+    .headline .accent { color: var(--green); }
+
+    .subtitle {
+      margin: -16px 0 12px;
+      font-size: 38px;
+      line-height: 1.25;
+      font-weight: 800;
+    }
+
+    .evidence-card {
+      width: 100%;
+      min-height: 430px;
+      padding: 42px;
+      border-radius: 12px;
+      background: var(--card);
+      box-shadow: 0 14px 36px rgba(20, 20, 20, 0.08);
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 42px;
+      align-items: center;
+    }
+
+    .no-card {
+      height: 260px;
+      padding: 34px 30px;
+      border-radius: 10px;
+      background: var(--deep);
+      color: #fff;
+    }
+
+    .no-card strong {
+      display: block;
+      color: var(--gold);
+      font-size: 58px;
+      line-height: 1;
+      margin-bottom: 26px;
+    }
+
+    .no-card span {
+      font-size: 31px;
+      line-height: 1.28;
+      font-weight: 800;
+    }
+
+    .beat-list {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      font-size: 36px;
+      font-weight: 850;
+    }
+
+    .beat {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .beat b {
+      color: var(--green);
+      font-size: 38px;
+    }
+
+    .chart {
+      height: 280px;
+      border-bottom: 3px solid rgba(179, 139, 66, 0.35);
+      border-left: 3px solid rgba(179, 139, 66, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chart svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .metric {
+      padding: 18px;
+      border-radius: 8px;
+      background: #f2eadc;
+      color: var(--gold);
+      font-size: 26px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .book-wrap {
+      display: grid;
+      grid-template-columns: 270px 1fr;
+      gap: 38px;
+      align-items: center;
+    }
+
+    .book-cover {
+      width: 240px;
+      max-height: 340px;
+      border-radius: 8px;
+      object-fit: cover;
+      box-shadow: 0 18px 34px rgba(16, 24, 32, 0.2);
+      background: var(--deep);
+    }
+
+    .footer-tags {
+      position: absolute;
+      left: 92px;
+      bottom: 204px;
+      display: flex;
+      gap: 18px;
+    }
+
+    .footer-tags span {
+      padding: 13px 22px;
+      border-radius: 8px;
+      background: #f2eadc;
+      color: var(--gold);
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    audio { display: none; }
+  </style>
+</head>
+<body>
+  <div
+    data-composition-id="finance-narration-standard"
+    data-start="0"
+    data-duration="60"
+    data-width="1080"
+    data-height="1920"
+  >
+    <audio id="voice" data-start="0" data-track-index="0" src="assets/voiceover.wav"></audio>
+
+    <section class="scene" data-scene="s1">
+      <div class="eyebrow">方法验证</div>
+      <h1 class="headline">别再把<span class="accent">指标</span>当答案</h1>
+      <p class="subtitle">先问它有没有被验证</p>
+      <div class="evidence-card">
+        <div class="no-card"><strong>NO</strong><span>别再只看金叉死叉</span></div>
+        <div class="beat-list">
+          <div class="beat"><b>1</b><span>看见信号</span></div>
+          <div class="beat"><b>2</b><span>先做回测</span></div>
+          <div class="beat"><b>3</b><span>再谈执行</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene" data-scene="s2">
+      <div class="eyebrow">真正的问题</div>
+      <h1 class="headline">你亏的不是指标<br><span class="accent">是流程</span></h1>
+      <p class="subtitle">没有流程，任何指标都会失效</p>
+      <div class="evidence-card">
+        <div class="no-card"><strong>NO</strong><span>先搭流程再看指标</span></div>
+        <div class="beat-list">
+          <div class="beat"><b>1</b><span>入场规则</span></div>
+          <div class="beat"><b>2</b><span>止损规则</span></div>
+          <div class="beat"><b>3</b><span>复盘规则</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene" data-scene="s3">
+      <div class="eyebrow">执行框架</div>
+      <h1 class="headline">知道方法<br><span class="accent">不等于</span>做得到</h1>
+      <p class="subtitle">交易差距，藏在执行力里</p>
+      <div class="evidence-card">
+        <div class="no-card"><strong>NO</strong><span>懂了不等于赚到</span></div>
+        <div class="beat-list">
+          <div class="beat"><b>1</b><span>止损能下手</span></div>
+          <div class="beat"><b>2</b><span>规则能执行</span></div>
+          <div class="beat"><b>3</b><span>复盘能坚持</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene" data-scene="s4">
+      <div class="eyebrow">数据验证</div>
+      <h1 class="headline">少一点感觉交易<br><span class="accent">多一点规则验证</span></h1>
+      <p class="subtitle">用样本、胜率、回撤校验规则</p>
+      <div class="evidence-card" style="display:block">
+        <div class="chart">
+          <svg viewBox="0 0 760 280" preserveAspectRatio="none">
+            <path class="curve" d="M0,225 C90,195 130,230 210,170 C300,95 380,150 470,92 C570,38 650,86 760,42" fill="none" stroke="#00785d" stroke-width="8" stroke-linecap="round"/>
+            <path class="noise" d="M0,180 C80,90 145,250 230,135 C330,240 405,60 510,155 C620,260 695,72 760,138" fill="none" stroke="#df605d" stroke-width="4" stroke-linecap="round" opacity=".55"/>
+          </svg>
+        </div>
+        <div class="metric-row">
+          <div class="metric">样本</div>
+          <div class="metric">胜率</div>
+          <div class="metric">回撤</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene" data-scene="s5">
+      <div class="eyebrow">信号过滤</div>
+      <h1 class="headline">均线不是<br><span class="accent">买卖按钮</span></h1>
+      <p class="subtitle">它只提示趋势，不替你决策</p>
+      <div class="evidence-card">
+        <div class="no-card"><strong>NO</strong><span>买卖不能靠按钮</span></div>
+        <div class="beat-list">
+          <div class="beat"><b>1</b><span>趋势过滤</span></div>
+          <div class="beat"><b>2</b><span>规则确认</span></div>
+          <div class="beat"><b>3</b><span>风险先行</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene" data-scene="s6">
+      <div class="eyebrow">少走弯路</div>
+      <h1 class="headline">量化不是<br><span class="accent">天才专利</span></h1>
+      <p class="subtitle">本质是规则和验证</p>
+      <div class="evidence-card book-wrap">
+        <img class="book-cover" src="assets/book-cover.png" alt="" />
+        <div class="beat-list">
+          <div class="beat"><b>1</b><span>回测表</span></div>
+          <div class="beat"><b>2</b><span>指标验证</span></div>
+          <div class="beat"><b>3</b><span>可以搜来看看</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-tags"><span>回测</span><span>概率</span><span>执行</span></div>
+  </div>
+
+  <script>
+    window.__timelines = window.__timelines || {};
+    const tl = gsap.timeline({ paused: true });
+    const scenes = gsap.utils.toArray(".scene");
+    const starts = [0, 7, 17, 28, 40, 50];
+    const durations = [7, 10, 11, 12, 10, 10];
+
+    scenes.forEach((scene, i) => {
+      const start = starts[i];
+      const end = start + durations[i] - 0.35;
+      tl.set(scene, { opacity: 1 }, start);
+      tl.from(scene.querySelector(".eyebrow"), { y: 18, opacity: 0, duration: 0.35, ease: "power2.out" }, start + 0.12);
+      tl.from(scene.querySelector(".headline"), { y: 42, opacity: 0, duration: 0.55, ease: "power3.out" }, start + 0.26);
+      tl.from(scene.querySelector(".subtitle"), { y: 24, opacity: 0, duration: 0.42, ease: "power2.out" }, start + 0.72);
+      tl.from(scene.querySelector(".evidence-card"), { y: 48, opacity: 0, duration: 0.56, ease: "power3.out" }, start + 1.05);
+      tl.from(scene.querySelectorAll(".beat, .metric"), { y: 18, opacity: 0, duration: 0.28, stagger: 0.16, ease: "power2.out" }, start + 1.45);
+      tl.to(scene, { opacity: 0, duration: 0.28, ease: "power1.in" }, end);
+    });
+
+    tl.from(".footer-tags span", { y: 14, opacity: 0, duration: 0.3, stagger: 0.1 }, 1.6);
+    window.__timelines["finance-narration-standard"] = tl;
+  </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "width": 1080,
+  "height": 1920,
+  "output": "cover.png",
+  "book_cover": "assets/book-cover.png",
+  "eyebrow": "《概率的朋友》｜金融方法验证",
+  "top_tag": "少走弯路",
+  "title": "均线假信号|根源不在均线",
+  "subtitle": "你亏的不是指标，是没有验证",
+  "left_card": "别再只看金叉死叉",
+  "bullets": ["指标不是答案", "先做回测", "再谈执行"],
+  "conclusion": "别再把指标当答案，先用数据验证它到底有没有用。"
+}

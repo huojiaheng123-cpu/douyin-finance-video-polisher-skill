@@ -4,9 +4,11 @@
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 
 
 def find_command(names: list[str]) -> str | None:
@@ -24,15 +26,66 @@ def existing_path(candidates: list[Path]) -> str | None:
     return None
 
 
+def home_candidates() -> list[Path]:
+    homes = [Path.home()]
+    cwd_parts = Path.cwd().parts
+    if len(cwd_parts) >= 3 and cwd_parts[1].lower() == "users":
+        workspace_home = Path(cwd_parts[0], cwd_parts[1], cwd_parts[2])
+        if workspace_home not in homes:
+            homes.append(workspace_home)
+    return homes
+
+
 def find_ffmpeg_tool(tool: str) -> str | None:
     path_name = f"{tool}.exe" if not tool.endswith(".exe") else tool
-    home = Path.home()
+    cwd = Path.cwd()
     candidates = [
-        home / "node_modules" / "@ffmpeg-installer" / "win32-x64" / path_name,
-        home / "node_modules" / "@ffmpeg-installer" / "ffmpeg" / path_name,
-        Path.cwd() / "node_modules" / "@ffmpeg-installer" / "win32-x64" / path_name,
+        cwd / "node_modules" / "@ffmpeg-installer" / "win32-x64" / path_name,
+        cwd / "node_modules" / "@ffmpeg-installer" / "ffmpeg" / path_name,
+        cwd / "node_modules" / "ffmpeg-static" / path_name,
     ]
+    for home in home_candidates():
+        candidates.extend(
+            [
+                home / "node_modules" / "@ffmpeg-installer" / "win32-x64" / path_name,
+                home / "node_modules" / "@ffmpeg-installer" / "ffmpeg" / path_name,
+                home / "node_modules" / "ffmpeg-static" / path_name,
+            ]
+        )
+    if tool.replace(".exe", "").lower() == "ffprobe":
+        candidates.extend(
+            [
+                cwd / "node_modules" / "@ffprobe-installer" / "win32-x64" / path_name,
+                cwd / "node_modules" / "ffprobe-static" / "bin" / "win32" / "x64" / path_name,
+                cwd / "node_modules" / "ffprobe-static" / "bin" / "win32" / "ia32" / path_name,
+            ]
+        )
+        for home in home_candidates():
+            candidates.extend(
+                [
+                    home / "node_modules" / "@ffprobe-installer" / "win32-x64" / path_name,
+                    home / "node_modules" / "ffprobe-static" / "bin" / "win32" / "x64" / path_name,
+                    home / "node_modules" / "ffprobe-static" / "bin" / "win32" / "ia32" / path_name,
+                ]
+            )
     return find_command([tool, path_name]) or existing_path(candidates)
+
+
+def install_hint(name: str) -> str:
+    hints = {
+        "FFmpeg": "Install FFmpeg or add a bundled ffmpeg-static path to PATH.",
+        "ffprobe": "Install ffprobe with FFmpeg or add @ffprobe-installer/ffprobe-static to PATH.",
+        "Node.js": "Install Node.js LTS so HyperFrames and browser tooling can run.",
+        "npm": "Install Node.js LTS; npm is normally bundled with it.",
+        "npx": "Install Node.js LTS; npx is normally bundled with npm.",
+        "HyperFrames CLI": "Install/configure HyperFrames CLI or rerun this check with --network to test npx hyperframes@latest.",
+        "Browser/media preview": "Install Chrome/Edge or use a Codex/browser preview tool; otherwise generate review clips.",
+    }
+    return hints.get(name, "Install or configure this capability before production.")
+
+
+def rank(level: str) -> int:
+    return {"minimal": 0, "recommended": 1, "full": 2}[level]
 
 
 def find_hyperframes_cli() -> str | None:
@@ -85,6 +138,17 @@ def main() -> int:
         action="store_true",
         help="Allow npx to resolve hyperframes@latest. Default is local-only and will not download packages.",
     )
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Print machine-readable JSON instead of the human setup report.",
+    )
+    parser.add_argument(
+        "--require",
+        choices=["minimal", "recommended", "full"],
+        default=None,
+        help="Exit with code 2 when the machine is below this capability level.",
+    )
     args = parser.parse_args()
 
     checks = []
@@ -127,44 +191,79 @@ def main() -> int:
     unconfirmed.append(("Transcription timestamps", "precise semantic scene boundaries", transcription_hint))
 
     available = [name for name, ok, _, _ in checks if ok]
-    missing = [(name, purpose) for name, ok, purpose, _ in checks if not ok]
+    missing = [(name, purpose, install_hint(name)) for name, ok, purpose, _ in checks if not ok]
 
     has_renderer = hyperframes_ok
     has_motion_review = ffmpeg_ok
     has_preview = bool(browser_found)
-    if has_renderer and has_motion_review and has_preview:
+    if has_renderer and has_motion_review and ffprobe_ok and has_preview:
         level = "full"
-    elif has_motion_review and (has_renderer or node_ok):
+    elif has_motion_review and ffprobe_ok and has_renderer:
         level = "recommended"
     else:
         level = "minimal"
 
-    print(f"Current capability level: {level}")
-    print("Available:")
-    for name in available:
-        print(f"- {name}")
-    print("Missing or unconfirmed:")
-    for name, purpose in missing:
-        print(f"- {name}: needed for {purpose}.")
-    for name, purpose, hint in unconfirmed:
-        print(f"- {name}: needed for {purpose}. {hint}.")
-    print("Impact:")
-    if level == "full":
-        print("- This machine can render, mux, and dynamically review video.")
-    elif level == "recommended":
-        print("- This machine can produce video and motion-review artifacts, but may still need direct playback or transcription for best sync review.")
-    else:
-        print("- This machine cannot reliably render or dynamically verify final video yet.")
-    print("Suggested next step:")
     if not ffmpeg_ok:
-        print("- Install/configure FFmpeg first; it gives the biggest quality gain for muxing and motion review.")
+        next_step = "Install/configure FFmpeg first; it gives the biggest quality gain for muxing and motion review."
+    elif not ffprobe_ok:
+        next_step = "Install/configure ffprobe so durations and audio/video streams can be verified."
     elif not hyperframes_ok:
-        print("- Configure HyperFrames CLI next so HTML compositions can be rendered and inspected.")
+        next_step = "Configure HyperFrames CLI next so HTML compositions can be rendered and inspected."
     elif not has_preview:
-        print("- Add a browser/media preview path or generate short MP4 review clips for the user.")
+        next_step = "Add a browser/media preview path or generate short MP4 review clips for the user."
     else:
-        print("- Add transcription/word timestamps if precise semantic sync is needed.")
+        next_step = "Add transcription/word timestamps if precise semantic sync is needed."
 
+    if level == "full":
+        impact = "This machine can render, mux, and dynamically review video."
+    elif level == "recommended":
+        impact = "This machine can produce video and motion-review artifacts, but may still need direct playback or transcription for best sync review."
+    else:
+        impact = "This machine cannot reliably render or dynamically verify final video yet."
+
+    result = {
+        "capabilityLevel": level,
+        "meetsRequiredLevel": args.require is None or rank(level) >= rank(args.require),
+        "requiredLevel": args.require,
+        "checks": [
+            {
+                "name": name,
+                "ok": ok,
+                "purpose": purpose,
+                "detail": detail,
+                "fix": install_hint(name) if not ok else None,
+            }
+            for name, ok, purpose, detail in checks
+        ],
+        "unconfirmed": [
+            {"name": name, "purpose": purpose, "detail": hint}
+            for name, purpose, hint in unconfirmed
+        ],
+        "impact": impact,
+        "suggestedNextStep": next_step,
+    }
+
+    if args.json:
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+    else:
+        print(f"Current capability level: {level}")
+        print("Available:")
+        for name in available:
+            print(f"- {name}")
+        print("Missing or unconfirmed:")
+        for name, purpose, fix in missing:
+            print(f"- {name}: needed for {purpose}. Fix: {fix}")
+        for name, purpose, hint in unconfirmed:
+            print(f"- {name}: needed for {purpose}. {hint}.")
+        print("Impact:")
+        print(f"- {impact}")
+        print("Suggested next step:")
+        print(f"- {next_step}")
+        if args.require and not result["meetsRequiredLevel"]:
+            print(f"Gate: required level '{args.require}' was not met.")
+
+    if args.require and not result["meetsRequiredLevel"]:
+        return 2
     return 0
 
 
